@@ -7,7 +7,7 @@ form.addEventListener('submit', addItem);
 itemList.addEventListener('click', removeItem);
 itemList.addEventListener('click', editItem);
 
-let crudid = "a659cbb947d14be190fb17d42e9a7521"
+let crudid = "58f97fc6c2da48549abe39eebc157a40"
 
 window.onload = () => {
     axios.get(`https://crudcrud.com/api/${crudid}/appointmentdata`)
@@ -34,7 +34,7 @@ function addItem(e) {
     let postObj = new Myobj(newName, newEmail, newPhone)
     if (editId.textContent) {
         axios.put(`https://crudcrud.com/api/${crudid}/appointmentdata/${editId.textContent}`, postObj)
-        showOutput(postObj)
+        showOutput(postObj);
 
     } else {
         axios.post(`https://crudcrud.com/api/${crudid}/appointmentdata`, postObj)
@@ -49,7 +49,10 @@ function removeItem(e) {
             var li = e.target.parentElement;
             itemList.removeChild(li);
             let editobjkey = li.classList[1];
+            console.log(editobjkey);
             axios.delete(`https://crudcrud.com/api/${crudid}/appointmentdata/${editobjkey}`)
+            .then(res => console.log(res))
+            .catch(err=> console.log(err));
         }
     }
 }
@@ -59,16 +62,18 @@ function editItem(e) {
         var li = e.target.parentElement;
         let editData = li.innerText.split("-");
         let editobjkey = li.classList[1];
-        // console.log(li.classList)
+        console.log(li.classList)
+        console.log(editData)
+
         editId.textContent = editobjkey;
         itemList.removeChild(li);
         document.getElementById('name').value = editData[0];
         document.getElementById('email').value = editData[1];
-        document.getElementById('number').value = editData[2].slice(0, 10);
+        document.getElementById('number').value = editData[2];
     }
 }
 function showOutput(data) {
     itemList.insertAdjacentHTML("beforeend", `
-        <li class="list-group-item ${data._id}">${data.name}-${data.email}-${data.phone}<button class="btn btn-primary btn-sm float-right edit ml-2">
+        <li class="list-group-item ${data._id}">${data.name}-${data.email}-${data.phone}-<button class="btn btn-primary btn-sm float-right edit ml-2">
     Edit</button><button class="btn btn-danger btn-sm float-right delete">X</button></li>`)
 }
