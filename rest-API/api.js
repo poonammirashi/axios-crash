@@ -66,7 +66,7 @@ function removefromscreen(stockid){
 
 function buyone(_id,newname,newdescriptin,newprice,newQuantity,n) {
     console.log(_id);
-    
+    if(newQuantity>=n){
     removefromscreen(_id);
     let obj={_id,newname,newdescriptin,newprice,newQuantity:newQuantity-n}
     axios.put(`https://crudcrud.com/api/${crudid}/stocktool/${_id}`, {newname,newdescriptin,newprice,newQuantity:newQuantity-1})
@@ -74,5 +74,13 @@ function buyone(_id,newname,newdescriptin,newprice,newQuantity,n) {
             console.log(res)
             showOutput(obj)
     })
+} else {
+    let li=document.getElementById(`${_id}`)
+    li.innerHTML="<h5>stock is over</h5>"
+    let itemlist=document.getElementById("users")
+    // itemlist.removeChild(li)
+    deleteuser(_id);
+
+}
 }
 
